@@ -7,16 +7,20 @@ class ResourcesList extends Component {
     this.state = {
       isEditing: false,
       resources: [],
-      form: this.props.resourceType.fields.reduce((map, obj) => {
-        map[obj.name] = ''
-        return map
-      }, {})
+      form: this.setFormFields()
     }
 
     this.handleNewResource = this.handleNewResource.bind(this)
     this.handleSaveResource = this.handleSaveResource.bind(this)
     this.handleEditFormField = this.handleEditFormField.bind(this)
     this.handleDeleteResource = this.handleDeleteResource.bind(this)
+  }
+
+  setFormFields() {
+    return this.props.resourceType.fields.reduce((map, obj) => {
+      map[obj.name] = ''
+      return map
+    }, {})
   }
 
   handleNewResource(e) {
@@ -29,7 +33,8 @@ class ResourcesList extends Component {
     // TODO: AJAX POST the new resource
     this.setState({
       isEditing: false,
-      resources: this.state.resources.concat(this.state.form)
+      resources: this.state.resources.concat(this.state.form),
+      form: this.setFormFields()
     })
   }
 

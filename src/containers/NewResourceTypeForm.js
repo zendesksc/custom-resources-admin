@@ -15,18 +15,7 @@ class NewResourceTypeForm extends Component {
         value: '',
         error: ''
       },
-      fields: [
-        {
-          name: 'id',
-          type: 'string',
-          description: 'The id of the product'
-        },
-        {
-          name: 'name',
-          type: 'string',
-          description: 'The name of the product'
-        }
-      ]
+      fields: []
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -47,7 +36,7 @@ class NewResourceTypeForm extends Component {
 
     this.setState({
       fields: this.state.fields.map((field, i) => {
-        if (i === index) return { ...field, [name]: value }
+        if (i === index) return { ...field, [name]: { value: value, error: '' } }
         return field
       })
     })
@@ -56,9 +45,18 @@ class NewResourceTypeForm extends Component {
   handleAddNewField(e) {
     this.setState({
       fields: this.state.fields.concat({
-        name: '',
-        type: 'string',
-        description: ''
+        name: {
+          value: '',
+          error: ''
+        },
+        type: {
+          value: 'string',
+          error: ''
+        },
+        description: {
+          value: '',
+          error: ''
+        }
       })
     })
   }
@@ -69,8 +67,7 @@ class NewResourceTypeForm extends Component {
     })
   }
 
-  handleSubmit() {
-
+  validate() {
     let isValid = true
 
     if (this.state.title.value === '') {
@@ -87,14 +84,44 @@ class NewResourceTypeForm extends Component {
       isValid = false
     }
 
-    if (!isValid) return
+    this.state.fields.forEach((field, index) => {
 
+      if (field.name.value === '') {
+        this.setState({
+          fields: this.state.fields.map((field, i) => {
+            if (i === index) {
+              field.name.error = 'Name cannot be blank.'
+            }
+            return field
+          })
+        })
+        isValid = false
+      }
+
+      if (field.description.value === '') {
+        this.setState({
+          fields: this.state.fields.map((field, i) => {
+            if (i === index) {
+              field.description.error = 'Description cannot be blank.'
+            }
+            return field
+          })
+        })
+        isValid = false
+      }
+
+    })
+
+    return isValid
+  }
+
+  handleSubmit() {
+    if (!this.validate()) return
     // Push the resource object to the parent when sucessfully submitted
     this.props.onSuccess(this.state)
   }
 
   render() {
-    console.log(this.state)
     return (
       <div>
 
@@ -114,7 +141,7 @@ class NewResourceTypeForm extends Component {
               <div className='card-header' data-toggle="collapse" data-target={'#field' + index}>
                 <h5 className='mb-0 float-left'>
                   <button className="btn btn-link">
-                    {field.name !== '' ? field.name : 'New Field'}
+                    {field.name.value !== '' ? field.name.value : 'New Field'}
                   </button>
                 </h5>
                 <button className='btn btn-outline-danger float-right' onClick={this.handleDeleteField.bind(this, index)}>Delete field</button>
@@ -124,10 +151,10 @@ class NewResourceTypeForm extends Component {
                 <div className='card-body'>
                   <div className='row'>
                     <div className='col-6'>
-                      <TextField label='Name' name='name' value={field.name} onChange={this.handleFieldChange.bind(this, index)} />
+                      <TextField label='Name' name='name' value={field.name.value} error={field.name.error} onChange={this.handleFieldChange.bind(this, index)} />
                     </div>
                     <div className='col-6'>
-                      <TextField label='Description' name='description' value={field.description} onChange={this.handleFieldChange.bind(this, index)} />
+                      <TextField label='Description' name='description' value={field.description.value} error={field.description.error} onChange={this.handleFieldChange.bind(this, index)} />
                     </div>
                   </div>
                 </div>

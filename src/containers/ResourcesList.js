@@ -13,11 +13,10 @@ class ResourcesList extends Component {
           barcode: '1294738572957283'
         }
       ],
-      form: {
-        id: '',
-        name: '',
-        barcode: ''
-      }
+      form: this.props.resourceType.fields.reduce((map, obj) => {
+        map[obj.name] = ''
+        return map
+      }, {})
     }
 
     this.handleNewResource = this.handleNewResource.bind(this)
@@ -59,24 +58,20 @@ class ResourcesList extends Component {
 
               {this.state.resources.map((resource, index) => (
                 <tr key={index}>
-                  <td>{resource.id}</td>
-                  <td>{resource.name}</td>
-                  <td>{resource.barcode}</td>
+                  {this.props.resourceType.fields.map((field, index) => (
+                    <td key={index}>{resource[field.name]}</td>
+                  ))}
                   <td><button>Delete</button></td>
                 </tr>
               ))}
 
               {this.state.isEditing ?
                 <tr>
-                  <td>
-                    <input type='text' name='id' value={this.state.form.id} />
-                  </td>
-                  <td>
-                    <input type='text' name='name' value={this.state.form.name} />
-                  </td>
-                  <td>
-                    <input type='text' name='barcode' value={this.state.form.barcode} />
-                  </td>
+                  {this.props.resourceType.fields.map((field, index) => (
+                    <td key={index}>
+                      <input type='text' name={field.name} />
+                    </td>
+                  ))}
                   <td>
                     <button onClick={this.handleSaveResource}>Save</button>
                   </td>

@@ -6,13 +6,7 @@ class ResourcesList extends Component {
 
     this.state = {
       isEditing: false,
-      resources: [
-        {
-          id: '8883124',
-          name: 'iPhone 8',
-          barcode: '1294738572957283'
-        }
-      ],
+      resources: [],
       form: this.props.resourceType.fields.reduce((map, obj) => {
         map[obj.name] = ''
         return map
@@ -22,6 +16,7 @@ class ResourcesList extends Component {
     this.handleNewResource = this.handleNewResource.bind(this)
     this.handleSaveResource = this.handleSaveResource.bind(this)
     this.handleEditFormField = this.handleEditFormField.bind(this)
+    this.handleDeleteResource = this.handleDeleteResource.bind(this)
   }
 
   handleNewResource(e) {
@@ -31,6 +26,7 @@ class ResourcesList extends Component {
   }
 
   handleSaveResource(e) {
+    // TODO: AJAX POST the new resource
     this.setState({
       isEditing: false,
       resources: this.state.resources.concat(this.state.form)
@@ -46,8 +42,15 @@ class ResourcesList extends Component {
     })
   }
 
+  handleDeleteResource(index, e) {
+    this.setState({
+      resources: this.state.resources.filter((resource, i) => {
+        if (i !== index) return resource
+      })
+    })
+  }
+
   render() {
-    console.log(this.state)
     return (
       <div>
         <div>
@@ -72,7 +75,7 @@ class ResourcesList extends Component {
                   {this.props.resourceType.fields.map((field, index) => (
                     <td key={index}>{resource[field.name]}</td>
                   ))}
-                  <td><button>Delete</button></td>
+                  <td><button onClick={this.handleDeleteResource.bind(this, index)}>Delete</button></td>
                 </tr>
               ))}
 

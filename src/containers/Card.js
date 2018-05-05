@@ -12,27 +12,11 @@ class Card extends Component {
     super(props)
 
     this.state = {
-      mode: MODES.RESOURCES_LIST,
+      mode: MODES.NEW_RESOURCE_TYPE_FORM,
       resourceType: {
-        title: 'Product',
-        key: 'product',
-        fields: [
-          {
-            name: 'id',
-            type: 'string',
-            description: 'The id of the product'
-          },
-          {
-            name: 'name',
-            type: 'string',
-            description: 'The name of the product'
-          },
-          {
-            name: 'barcode',
-            type: 'string',
-            description: 'The 16 digit barcode of the product'
-          }
-        ]
+        title: '',
+        key: '',
+        fields: []
       }
     }
 

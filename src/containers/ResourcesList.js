@@ -52,10 +52,7 @@ class ResourcesList extends Component {
     return (
       <div>
         <div>
-          {this.props.resourceType.title}
-        </div>
-        <div>
-          <table>
+          <table className='table'>
             <thead>
 
               <tr>
@@ -73,7 +70,7 @@ class ResourcesList extends Component {
                   {this.props.resourceType.fields.map((field, index) => (
                     <td key={index}>{resource[field.name]}</td>
                   ))}
-                  <td><button onClick={this.handleDeleteResource.bind(this, index)}>Delete</button></td>
+                  <td><button className='btn btn-outline-danger' onClick={this.handleDeleteResource.bind(this, index)}>Delete</button></td>
                 </tr>
               ))}
 
@@ -81,11 +78,12 @@ class ResourcesList extends Component {
                 <tr>
                   {this.props.resourceType.fields.map((field, index) => (
                     <td key={index}>
-                      <input type='text' name={field.name} onChange={this.handleEditFormField} />
+                      <input className='form-control' type='text' name={field.name} onChange={this.handleEditFormField} />
+                      <small class="form-text text-muted">{field.description}</small>
                     </td>
                   ))}
                   <td>
-                    <button onClick={this.handleSaveResource}>Save</button>
+                    <button className='btn btn-primary' onClick={this.handleSaveResource}>Save</button>
                   </td>
                 </tr>
                 : null}
@@ -94,7 +92,7 @@ class ResourcesList extends Component {
           </table>
         </div>
         <div>
-          <button onClick={this.handleNewResource} disabled={this.state.isEditing}>New {this.props.resourceType.title}</button>
+          <button className='btn btn-link' onClick={this.handleNewResource} disabled={this.state.isEditing}>New {this.props.resourceType.title}</button>
         </div>
       </div>
     )

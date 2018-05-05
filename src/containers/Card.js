@@ -13,22 +13,7 @@ class Card extends Component {
 
     this.state = {
       mode: MODES.NEW_RESOURCE_TYPE_FORM,
-      resourceType: {
-        title: 'Product',
-        key: 'product',
-        fields: [
-          {
-            name: 'id',
-            type: 'string',
-            description: 'The id of the product'
-          },
-          {
-            name: 'name',
-            type: 'string',
-            description: 'The name of the product'
-          }
-        ]
-      }
+      resourceType: {}
     }
 
     this.handleNewResourceTypeFormSuccess = this.handleNewResourceTypeFormSuccess.bind(this)

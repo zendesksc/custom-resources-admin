@@ -57,7 +57,7 @@ class ResourcesList extends Component {
 
               <tr>
                 {this.props.resourceType.fields.map((field, index) => (
-                  <th key={index}>{field.name}</th>
+                  <th key={index}>{field.name.value}</th>
                 ))}
                 <th></th>
               </tr>
@@ -68,7 +68,7 @@ class ResourcesList extends Component {
               {this.state.resources.map((resource, index) => (
                 <tr key={index}>
                   {this.props.resourceType.fields.map((field, index) => (
-                    <td key={index}>{resource[field.name]}</td>
+                    <td key={index}>{resource[field.name.value]}</td>
                   ))}
                   <td><button className='btn btn-outline-danger' onClick={this.handleDeleteResource.bind(this, index)}>Delete</button></td>
                 </tr>
@@ -78,8 +78,8 @@ class ResourcesList extends Component {
                 <tr>
                   {this.props.resourceType.fields.map((field, index) => (
                     <td key={index}>
-                      <input className='form-control' type='text' name={field.name} onChange={this.handleEditFormField} />
-                      <small className="form-text text-muted">{field.description}</small>
+                      <input className='form-control' type='text' name={field.name.value} onChange={this.handleEditFormField} />
+                      <small className="form-text text-muted">{field.description.value}</small>
                     </td>
                   ))}
                   <td>

@@ -26,6 +26,7 @@ class NewResourceTypeForm extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleAddNewField = this.handleAddNewField.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleDeleteField = this.handleDeleteField.bind(this)
   }
 
   handleChange(e) {
@@ -56,6 +57,12 @@ class NewResourceTypeForm extends Component {
     })
   }
 
+  handleDeleteField(index, e) {
+    this.setState({
+      fields: this.state.fields.filter((field, i) => i !== index)
+    })
+  }
+
   handleSubmit() {
     console.log('Do some AJAX to submit to the database')
 
@@ -78,19 +85,23 @@ class NewResourceTypeForm extends Component {
         <div>
           {this.state.fields.map((field, index) => (
             <div key={index} className='card mb-3'>
+
               <div className='card-header'>
-                <h5 className='mb-0'>
+                <h5 className='mb-0 float-left'>
                   <button className="btn btn-link" data-toggle="collapse" data-target={'#field' + index}>
                     {field.name !== '' ? field.name : 'New Field'}
                   </button>
                 </h5>
+                <button className='btn btn-outline-danger float-right' onClick={this.handleDeleteField.bind(this, index)}>Delete field</button>
               </div>
+
               <div className='collapse show' id={'field' + index}>
                 <div className='card-body'>
                   <TextField label='Name' name='name' value={field.name} onChange={this.handleFieldChange.bind(this, index)} />
                   <TextField label='Description' name='description' value={field.description} onChange={this.handleFieldChange.bind(this, index)} />
                 </div>
               </div>
+
             </div>
           ))}
         </div>

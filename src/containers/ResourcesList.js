@@ -21,6 +21,7 @@ class ResourcesList extends Component {
 
     this.handleNewResource = this.handleNewResource.bind(this)
     this.handleSaveResource = this.handleSaveResource.bind(this)
+    this.handleEditFormField = this.handleEditFormField.bind(this)
   }
 
   handleNewResource(e) {
@@ -36,7 +37,17 @@ class ResourcesList extends Component {
     })
   }
 
+  handleEditFormField(e) {
+    let name = e.target.name
+    let value = e.target.value
+
+    this.setState({
+      form: { ...this.state.form, [name]: value }
+    })
+  }
+
   render() {
+    console.log(this.state)
     return (
       <div>
         <div>
@@ -69,7 +80,7 @@ class ResourcesList extends Component {
                 <tr>
                   {this.props.resourceType.fields.map((field, index) => (
                     <td key={index}>
-                      <input type='text' name={field.name} />
+                      <input type='text' name={field.name} onChange={this.handleEditFormField} />
                     </td>
                   ))}
                   <td>
@@ -82,7 +93,7 @@ class ResourcesList extends Component {
           </table>
         </div>
         <div>
-          <button onClick={this.handleNewResource}>New {this.props.resourceType.title}</button>
+          <button onClick={this.handleNewResource} disabled={this.state.isEditing}>New {this.props.resourceType.title}</button>
         </div>
       </div>
     )

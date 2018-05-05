@@ -7,8 +7,14 @@ class NewResourceTypeForm extends Component {
     super(props)
 
     this.state = {
-      title: 'Product',
-      key: 'product',
+      title: {
+        value: '',
+        error: ''
+      },
+      key: {
+        value: '',
+        error: ''
+      },
       fields: [
         {
           name: 'id',
@@ -31,7 +37,7 @@ class NewResourceTypeForm extends Component {
 
   handleChange(e) {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: { value: e.target.value, error: '' }
     })
   }
 
@@ -64,22 +70,40 @@ class NewResourceTypeForm extends Component {
   }
 
   handleSubmit() {
-    console.log('Do some AJAX to submit to the database')
+
+    let isValid = true
+
+    if (this.state.title.value === '') {
+      this.setState({
+        title: { ...this.state.title, error: 'Title cannot be blank.' }
+      })
+      isValid = false
+    }
+
+    if (this.state.key.value === '') {
+      this.setState({
+        key: { ...this.state.key, error: 'Key cannot be blank.' }
+      })
+      isValid = false
+    }
+
+    if (!isValid) return
 
     // Push the resource object to the parent when sucessfully submitted
     this.props.onSuccess(this.state)
   }
 
   render() {
+    console.log(this.state)
     return (
       <div>
 
         <div className='row'>
           <div className='col-6'>
-            <TextField label='Title' name='title' value={this.state.title} onChange={this.handleChange} />
+            <TextField label='Title' name='title' value={this.state.title.value} error={this.state.title.error} onChange={this.handleChange} />
           </div>
           <div className='col-6'>
-            <TextField label='Key' name='key' value={this.state.key} onChange={this.handleChange} />
+            <TextField label='Key' name='key' value={this.state.key.value} error={this.state.key.error} onChange={this.handleChange} />
           </div>
         </div>
 

@@ -79,7 +79,7 @@ class ResourcesList extends Component {
                   {this.props.resourceType.fields.map((field, index) => (
                     <td key={index}>
                       <input className='form-control' type='text' name={field.name} onChange={this.handleEditFormField} />
-                      <small class="form-text text-muted">{field.description}</small>
+                      <small className="form-text text-muted">{field.description}</small>
                     </td>
                   ))}
                   <td>
@@ -92,7 +92,7 @@ class ResourcesList extends Component {
           </table>
         </div>
         <div>
-          <button className='btn btn-link' onClick={this.handleNewResource} disabled={this.state.isEditing}>New {this.props.resourceType.title}</button>
+          <button className='btn btn-link' onClick={this.handleNewResource} disabled={this.state.isEditing}>New {this.props.resourceType.title.value}</button>
         </div>
       </div>
     )

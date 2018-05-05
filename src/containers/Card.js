@@ -67,7 +67,7 @@ class Card extends Component {
           <div className='card-header'>
             <div className='row'>
               <div className='col-12'>
-                <h4 className='mb-0'>{this.state.resourceType.title}</h4>
+                <h4 className='mb-0'>{this.state.resourceType.title.value}</h4>
               </div>
             </div>
           </div>

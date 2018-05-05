@@ -44,9 +44,7 @@ class ResourcesList extends Component {
 
   handleDeleteResource(index, e) {
     this.setState({
-      resources: this.state.resources.filter((resource, i) => {
-        if (i !== index) return resource
-      })
+      resources: this.state.resources.filter((resource, i) => i !== index)
     })
   }
 

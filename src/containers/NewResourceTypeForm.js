@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import TextField from '../components/TextField'
+
 class NewResourceTypeForm extends Component {
   constructor(props) {
     super(props)
@@ -54,37 +56,25 @@ class NewResourceTypeForm extends Component {
     return (
       <div>
         <div>
-          <div>
-            <label>Title</label>
-            <input type='text' name='title' value={this.state.title} onChange={this.handleChange} />
-          </div>
-          <div>
-            <label>Key</label>
-            <input type='text' name='key' value={this.state.key} onChange={this.handleChange} />
-          </div>
+          <TextField label='Title' name='title' value={this.state.title} onChange={this.handleChange} />
+          <TextField label='Key' name='key' value={this.state.key} onChange={this.handleChange} />
         </div>
 
         <div>
           {this.state.fields.map((field, index) => (
             <div key={index}>
-              <div>
-                <label>Name</label>
-                <input type='text' name='name' value={field.name} onChange={this.handleFieldChange.bind(this, index)} />
-              </div>
-              <div>
-                <label>Description</label>
-                <input type='text' name='description' value={field.description} onChange={this.handleFieldChange.bind(this, index)} />
-              </div>
+              <TextField label='Name' name='name' value={field.name} onChange={this.handleFieldChange.bind(this, index)} />
+              <TextField label='Description' name='description' value={field.description} onChange={this.handleFieldChange.bind(this, index)} />
             </div>
           ))}
         </div>
 
         <div>
-          <button onClick={this.handleAddNewField}>Add new field</button>
+          <button className='c-btn c-btn--basic' onClick={this.handleAddNewField}>Add new field</button>
         </div>
 
         <div>
-          <button onClick={this.handleSubmit}>Save</button>
+          <button className='c-btn' onClick={this.handleSubmit}>Save</button>
         </div>
       </div>
     )

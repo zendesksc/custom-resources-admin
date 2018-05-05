@@ -46,6 +46,13 @@ class Card extends Component {
     if (this.state.mode === MODES.NEW_RESOURCE_TYPE_FORM) {
       return (
         <div className='card'>
+          <div className='card-header'>
+            <div className='row'>
+              <div className='col-12'>
+                <h4 className='mb-0'>Resource Type</h4>
+              </div>
+            </div>
+          </div>
           <div className='card-body'>
             <NewResourceTypeForm
               onSuccess={this.handleNewResourceTypeFormSuccess} />
@@ -57,6 +64,13 @@ class Card extends Component {
     if (this.state.mode === MODES.RESOURCES_LIST) {
       return (
         <div className='card'>
+          <div className='card-header'>
+            <div className='row'>
+              <div className='col-12'>
+                <h4 className='mb-0'>{this.state.resourceType.title}</h4>
+              </div>
+            </div>
+          </div>
           <div className='card-body'>
             <ResourcesList resourceType={this.state.resourceType} />
           </div>

@@ -73,6 +73,7 @@ class NewResourceTypeForm extends Component {
   render() {
     return (
       <div>
+
         <div className='row'>
           <div className='col-6'>
             <TextField label='Title' name='title' value={this.state.title} onChange={this.handleChange} />
@@ -113,11 +114,11 @@ class NewResourceTypeForm extends Component {
         </div>
 
         <div>
-          <button className='btn btn-link' onClick={this.handleAddNewField}>Add new field</button>
+          <button className='btn btn-link float-left' onClick={this.handleAddNewField}>Add new field</button>
         </div>
 
         <div>
-          <button className='btn btn-primary' onClick={this.handleSubmit}>Save</button>
+          <button className='btn btn-primary float-right' onClick={this.handleSubmit}>Save</button>
         </div>
       </div>
     )

@@ -86,9 +86,9 @@ class NewResourceTypeForm extends Component {
           {this.state.fields.map((field, index) => (
             <div key={index} className='card mb-3'>
 
-              <div className='card-header'>
+              <div className='card-header' data-toggle="collapse" data-target={'#field' + index}>
                 <h5 className='mb-0 float-left'>
-                  <button className="btn btn-link" data-toggle="collapse" data-target={'#field' + index}>
+                  <button className="btn btn-link">
                     {field.name !== '' ? field.name : 'New Field'}
                   </button>
                 </h5>
@@ -97,8 +97,14 @@ class NewResourceTypeForm extends Component {
 
               <div className='collapse show' id={'field' + index}>
                 <div className='card-body'>
-                  <TextField label='Name' name='name' value={field.name} onChange={this.handleFieldChange.bind(this, index)} />
-                  <TextField label='Description' name='description' value={field.description} onChange={this.handleFieldChange.bind(this, index)} />
+                  <div className='row'>
+                    <div className='col-6'>
+                      <TextField label='Name' name='name' value={field.name} onChange={this.handleFieldChange.bind(this, index)} />
+                    </div>
+                    <div className='col-6'>
+                      <TextField label='Description' name='description' value={field.description} onChange={this.handleFieldChange.bind(this, index)} />
+                    </div>
+                  </div>
                 </div>
               </div>
 

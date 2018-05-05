@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import slugify from '../utilities/slugify'
 
 import TextField from '../components/TextField'
 
@@ -26,7 +27,8 @@ class NewResourceTypeForm extends Component {
 
   handleChange(e) {
     this.setState({
-      [e.target.name]: { value: e.target.value, error: '' }
+      title: { value: e.target.value, error: '' },
+      key: { value: slugify(e.target.value), error: '' }
     })
   }
 
@@ -130,7 +132,7 @@ class NewResourceTypeForm extends Component {
             <TextField label='Title' name='title' value={this.state.title.value} error={this.state.title.error} onChange={this.handleChange} />
           </div>
           <div className='col-6'>
-            <TextField label='Key' name='key' value={this.state.key.value} error={this.state.key.error} onChange={this.handleChange} />
+            <TextField label='Key' name='key' value={this.state.key.value} disabled error={this.state.key.error} />
           </div>
         </div>
 

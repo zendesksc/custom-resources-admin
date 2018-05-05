@@ -7,9 +7,20 @@ class NewResourceTypeForm extends Component {
     super(props)
 
     this.state = {
-      title: '',
-      key: '',
-      fields: []
+      title: 'Product',
+      key: 'product',
+      fields: [
+        {
+          name: 'id',
+          type: 'string',
+          description: 'The id of the product'
+        },
+        {
+          name: 'name',
+          type: 'string',
+          description: 'The name of the product'
+        }
+      ]
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -55,26 +66,41 @@ class NewResourceTypeForm extends Component {
   render() {
     return (
       <div>
-        <div>
-          <TextField label='Title' name='title' value={this.state.title} onChange={this.handleChange} />
-          <TextField label='Key' name='key' value={this.state.key} onChange={this.handleChange} />
+        <div className='row'>
+          <div className='col-6'>
+            <TextField label='Title' name='title' value={this.state.title} onChange={this.handleChange} />
+          </div>
+          <div className='col-6'>
+            <TextField label='Key' name='key' value={this.state.key} onChange={this.handleChange} />
+          </div>
         </div>
 
         <div>
           {this.state.fields.map((field, index) => (
-            <div key={index}>
-              <TextField label='Name' name='name' value={field.name} onChange={this.handleFieldChange.bind(this, index)} />
-              <TextField label='Description' name='description' value={field.description} onChange={this.handleFieldChange.bind(this, index)} />
+            <div key={index} className='card mb-3'>
+              <div className='card-header'>
+                <h5 className='mb-0'>
+                  <button className="btn btn-link" data-toggle="collapse" data-target={'#field' + index}>
+                    {field.name !== '' ? field.name : 'New Field'}
+                  </button>
+                </h5>
+              </div>
+              <div className='collapse show' id={'field' + index}>
+                <div className='card-body'>
+                  <TextField label='Name' name='name' value={field.name} onChange={this.handleFieldChange.bind(this, index)} />
+                  <TextField label='Description' name='description' value={field.description} onChange={this.handleFieldChange.bind(this, index)} />
+                </div>
+              </div>
             </div>
           ))}
         </div>
 
         <div>
-          <button className='c-btn c-btn--basic' onClick={this.handleAddNewField}>Add new field</button>
+          <button className='btn btn-link' onClick={this.handleAddNewField}>Add new field</button>
         </div>
 
         <div>
-          <button className='c-btn' onClick={this.handleSubmit}>Save</button>
+          <button className='btn btn-primary' onClick={this.handleSubmit}>Save</button>
         </div>
       </div>
     )

@@ -12,7 +12,7 @@ class Card extends Component {
     super(props)
 
     this.state = {
-      mode: MODES.RESOURCES_LIST,
+      mode: MODES.NEW_RESOURCE_TYPE_FORM,
       resourceType: {
         title: 'Product',
         key: 'product',
@@ -45,17 +45,21 @@ class Card extends Component {
 
     if (this.state.mode === MODES.NEW_RESOURCE_TYPE_FORM) {
       return (
-        <div>
-          <NewResourceTypeForm
-            onSuccess={this.handleNewResourceTypeFormSuccess} />
+        <div className='card'>
+          <div className='card-body'>
+            <NewResourceTypeForm
+              onSuccess={this.handleNewResourceTypeFormSuccess} />
+          </div>
         </div>
       )
     }
 
     if (this.state.mode === MODES.RESOURCES_LIST) {
       return (
-        <div>
-          <ResourcesList resourceType={this.state.resourceType} />
+        <div className='card'>
+          <div className='card-body'>
+            <ResourcesList resourceType={this.state.resourceType} />
+          </div>
         </div>
       )
     }

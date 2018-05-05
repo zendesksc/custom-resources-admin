@@ -4,8 +4,12 @@ import Card from './containers/Card'
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <Card />
+      <div className='container'>
+        <div className='row'>
+          <div className='col-12'>
+            <Card />
+          </div>
+        </div>
       </div>
     );
   }

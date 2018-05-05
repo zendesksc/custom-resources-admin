@@ -168,9 +168,11 @@ class NewResourceTypeForm extends Component {
           <button className='btn btn-link float-left' onClick={this.handleAddNewField}>Add new field</button>
         </div>
 
-        <div>
-          <button className='btn btn-primary float-right' onClick={this.handleSubmit}>Save</button>
-        </div>
+        {this.state.fields.length > 0 ?
+          <div>
+            <button className='btn btn-primary float-right' onClick={this.handleSubmit}>Save</button>
+          </div>
+          : null}
       </div>
     )
   }

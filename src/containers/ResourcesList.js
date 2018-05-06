@@ -7,20 +7,13 @@ class ResourcesList extends Component {
     this.state = {
       isEditing: false,
       resources: [],
-      form: this.setFormFields()
+      form: {}
     }
 
     this.handleNewResource = this.handleNewResource.bind(this)
     this.handleSaveResource = this.handleSaveResource.bind(this)
     this.handleEditFormField = this.handleEditFormField.bind(this)
     this.handleDeleteResource = this.handleDeleteResource.bind(this)
-  }
-
-  setFormFields() {
-    return this.props.resourceType.fields.reduce((map, obj) => {
-      map[obj.name] = ''
-      return map
-    }, {})
   }
 
   handleNewResource(e) {
@@ -30,11 +23,13 @@ class ResourcesList extends Component {
   }
 
   handleSaveResource(e) {
+    // TODO: Validate form
+
     // TODO: AJAX POST the new resource
     this.setState({
       isEditing: false,
       resources: this.state.resources.concat(this.state.form),
-      form: this.setFormFields()
+      form: {}
     })
   }
 
@@ -43,7 +38,7 @@ class ResourcesList extends Component {
     let value = e.target.value
 
     this.setState({
-      form: { ...this.state.form, [name]: value }
+      form: { ...this.state.form, [name]: { value: value, error: '' } }
     })
   }
 
@@ -72,9 +67,11 @@ class ResourcesList extends Component {
 
               {this.state.resources.map((resource, index) => (
                 <tr key={index}>
-                  {this.props.resourceType.fields.map((field, index) => (
-                    <td key={index}>{resource[field.name.value]}</td>
-                  ))}
+                  {this.props.resourceType.fields.map((field, index) => {
+                    return (
+                      <td key={index}>{resource[field.name.value].value}</td>
+                    )
+                  })}
                   <td><button className='btn btn-outline-danger' onClick={this.handleDeleteResource.bind(this, index)}>Delete</button></td>
                 </tr>
               ))}

@@ -96,9 +96,11 @@ class ResourcesList extends Component {
             </tbody>
           </table>
         </div>
-        <div>
-          <button className='btn btn-link' onClick={this.handleNewResource} disabled={this.state.isEditing}>New {this.props.resourceType.title.value}</button>
-        </div>
+        {!this.state.isEditing ?
+          <div>
+            <button className='btn btn-link' onClick={this.handleNewResource} disabled={this.state.isEditing}>New {this.props.resourceType.title.value}</button>
+          </div>
+          : null}
       </div>
     )
   }

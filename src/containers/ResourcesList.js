@@ -24,13 +24,20 @@ class ResourcesList extends Component {
 
   handleSaveResource(e) {
     // TODO: Validate form
+    let isValid = true
 
-    // TODO: AJAX POST the new resource
-    this.setState({
-      isEditing: false,
-      resources: this.state.resources.concat(this.state.form),
-      form: {}
-    })
+    if (Object.keys(this.state.form).length === 0) {
+      isValid = false
+    }
+
+    if (isValid) {
+      // TODO: AJAX POST the new resource
+      this.setState({
+        isEditing: false,
+        resources: this.state.resources.concat(this.state.form),
+        form: {}
+      })
+    }
   }
 
   handleEditFormField(e) {

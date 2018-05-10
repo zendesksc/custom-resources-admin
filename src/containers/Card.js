@@ -34,7 +34,7 @@ class Card extends Component {
           <div className='card-header'>
             <div className='row'>
               <div className='col-12'>
-                <h4 className='mb-0'>Resource Types</h4>
+                <h4 className='mb-0'>Resource Type</h4>
               </div>
             </div>
           </div>

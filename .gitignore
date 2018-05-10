@@ -19,3 +19,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# remove compiled js
+/dist/assets/static
+/dist/assets/asset-manifest.json
+/dist/assets/service-worker.js

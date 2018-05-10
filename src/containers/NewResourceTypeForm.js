@@ -119,8 +119,37 @@ class NewResourceTypeForm extends Component {
 
   handleSubmit() {
     if (!this.validate()) return
-    // Push the resource object to the parent when sucessfully submitted
-    this.props.onSuccess(this.state)
+
+    let properties = {}
+    let required = []
+
+    this.state.fields.forEach((field) => {
+      properties[field.name.value] = {}
+      properties[field.name.value].type = 'string'
+      properties[field.name.value].description = field.description.value
+      required.push(field.name.value)
+    })
+
+    let data = {
+      data: {
+        title: this.state.title.value,
+        key: this.state.key.value,
+        schema: {
+          properties: properties,
+          required: required
+        }
+      }
+    }
+
+    client.request({
+      url: '/api/custom_resources/resource_types',
+      type: 'POST',
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify(data)
+    }).then(response => this.props.onSuccess(this.state))
+      .catch(error => console.error('Error:', error))
+
   }
 
   render() {

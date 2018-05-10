@@ -1,0 +1,17 @@
+{
+  "name": "Custom Resources Demo",
+  "author": {
+    "name": "Adam Gray",
+    "email": "agray@zendesk.com",
+    "url": ""
+  },
+  "defaultLocale": "en",
+  "private": true,
+  "location": {
+    "support": {
+      "nav_bar": "assets/index.html"
+    }
+  },
+  "version": "1.0",
+  "frameworkVersion": "2.0"
+}

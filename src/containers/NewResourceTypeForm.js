@@ -8,6 +8,7 @@ class NewResourceTypeForm extends Component {
     super(props)
 
     this.state = {
+      error: '',
       title: {
         value: '',
         error: ''
@@ -148,13 +149,35 @@ class NewResourceTypeForm extends Component {
       contentType: 'application/json',
       data: JSON.stringify(data)
     }).then(response => this.props.onSuccess(this.state))
-      .catch(error => console.error('Error:', error))
+      .catch(error => {
+
+        // This is the error if there is a network request issue
+        this.setState({
+          error: 'An error occured when submitting the resource type, please check the data and submit again.'
+        })
+
+        // This error displays if there is an error with the data the user has input to the form
+        if (error.errors.length > 0) {
+          this.setState({
+            error: 'An error occured when submitting the resource type, please check the data and submit again.'
+          })
+        }
+        return
+      })
 
   }
 
   render() {
     return (
       <div>
+
+        {this.state.error ?
+          <div className='row'>
+            <div className='col-12'>
+              <p>{this.state.error}</p>
+            </div>
+          </div>
+          : null}
 
         <div className='row'>
           <div className='col-6'>

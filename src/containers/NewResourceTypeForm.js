@@ -142,7 +142,7 @@ class NewResourceTypeForm extends Component {
       }
     }
 
-    client.request({
+    window.client.request({
       url: '/api/custom_resources/resource_types',
       type: 'POST',
       dataType: 'json',

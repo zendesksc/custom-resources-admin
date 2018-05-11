@@ -70,7 +70,7 @@ class NewResourceTypeForm extends Component {
     })
   }
 
-  validate() {
+  checkIsValid() {
     let isValid = true
 
     if (this.state.title.value === '') {
@@ -119,7 +119,7 @@ class NewResourceTypeForm extends Component {
   }
 
   handleSubmit() {
-    if (!this.validate()) return
+    if (!this.checkIsValid()) return
 
     let properties = {}
     let required = []

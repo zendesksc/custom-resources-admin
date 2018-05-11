@@ -3,6 +3,8 @@ import slugify from '../utilities/slugify'
 
 import TextField from '../components/TextField'
 
+console.log(window.client)
+
 class NewResourceTypeForm extends Component {
   constructor(props) {
     super(props)

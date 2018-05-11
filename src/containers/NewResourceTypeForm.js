@@ -19,13 +19,13 @@ class NewResourceTypeForm extends Component {
       fields: []
     }
 
-    this.handleChange = this.handleChange.bind(this)
+    this.handleSystemFieldChange = this.handleSystemFieldChange.bind(this)
     this.handleAddNewField = this.handleAddNewField.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleDeleteField = this.handleDeleteField.bind(this)
   }
 
-  handleChange(e) {
+  handleSystemFieldChange(e) {
     this.setState({
       title: { value: e.target.value, error: '' },
       key: { value: slugify(e.target.value), error: '' }
@@ -69,7 +69,7 @@ class NewResourceTypeForm extends Component {
     })
   }
 
-  validate() {
+  checkIsValid() {
     let isValid = true
 
     if (this.state.title.value === '') {
@@ -118,7 +118,7 @@ class NewResourceTypeForm extends Component {
   }
 
   handleSubmit() {
-    if (!this.validate()) return
+    if (!this.checkIsValid()) return
     // Push the resource object to the parent when sucessfully submitted
     this.props.onSuccess(this.state)
   }
@@ -129,7 +129,7 @@ class NewResourceTypeForm extends Component {
 
         <div className='row'>
           <div className='col-6'>
-            <TextField label='Title' name='title' value={this.state.title.value} error={this.state.title.error} onChange={this.handleChange} />
+            <TextField label='Title' name='title' value={this.state.title.value} error={this.state.title.error} onChange={this.handleSystemFieldChange} />
           </div>
           <div className='col-6'>
             <TextField label='Key' name='key' value={this.state.key.value} disabled error={this.state.key.error} />

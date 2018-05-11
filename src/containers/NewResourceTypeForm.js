@@ -3,8 +3,6 @@ import slugify from '../utilities/slugify'
 
 import TextField from '../components/TextField'
 
-console.log(window.client)
-
 class NewResourceTypeForm extends Component {
   constructor(props) {
     super(props)
@@ -176,7 +174,12 @@ class NewResourceTypeForm extends Component {
         {this.state.error ?
           <div className='row'>
             <div className='col-12'>
-              <p>{this.state.error}</p>
+              <div class="alert alert-danger alert-dismissible text-center fade show" role="alert">
+                {this.state.error}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
             </div>
           </div>
           : null}

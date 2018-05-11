@@ -9,7 +9,7 @@
   "private": true,
   "location": {
     "support": {
-      "nav_bar": "assets/index.html"
+      "nav_bar": "assets/public/index.html"
     }
   },
   "version": "1.0",

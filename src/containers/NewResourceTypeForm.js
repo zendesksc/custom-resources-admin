@@ -33,7 +33,6 @@ class NewResourceTypeForm extends Component {
 
     this.setState({
       fields: this.state.fields.map((field, i) => {
-        console.log(field)
         if (i === index) return {
           // Force name to be lowercase
           ...field, [name]: name === 'name' ? value.toLowerCase() : value
@@ -137,7 +136,17 @@ class NewResourceTypeForm extends Component {
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(data)
-    }).then(response => this.props.onSuccess(this.state))
+    }).then(res => {
+      this.setState(
+        {
+          error: '',
+          title: '',
+          key: '',
+          fields: []
+        }
+      )
+      this.props.onSuccess(res.data)
+    })
       .catch(err => {
         console.log(err)
         return

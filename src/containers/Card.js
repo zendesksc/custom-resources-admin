@@ -25,6 +25,10 @@ class Card extends Component {
         mode: MODES.RESOURCES_LIST,
         resourceType: this.formatResourceType(this.props.resourceType)
       })
+    } else {
+      this.setState({
+        resourceType: {}
+      })
     }
   }
 
@@ -54,9 +58,9 @@ class Card extends Component {
 
   handleNewResourceTypeFormSuccess(submittedResourceType) {
     this.setState({
-      mode: MODES.RESOURCES_LIST,
-      resourceType: submittedResourceType
+      resourceType: this.formatResourceType(submittedResourceType)
     })
+    this.props.onNewResourceTypeSuccess(submittedResourceType)
   }
 
   render() {
@@ -81,16 +85,18 @@ class Card extends Component {
 
     if (this.state.mode === MODES.RESOURCES_LIST) {
       return (
-        <div className='card'>
-          <div className='card-header'>
+        <div className='card mb-4'>
+          <div className='card-header' data-toggle="collapse" data-target={'#' + this.state.resourceType.key}>
             <div className='row'>
               <div className='col-12'>
                 <h4 className='mb-0'>{this.state.resourceType.key}</h4>
               </div>
             </div>
           </div>
-          <div className='card-body'>
-            <ResourcesList resourceType={this.state.resourceType} />
+          <div className='collapse show' id={this.state.resourceType.key}>
+            <div className='card-body'>
+              <ResourcesList resourceType={this.state.resourceType} />
+            </div>
           </div>
         </div>
       )

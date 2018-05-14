@@ -92,9 +92,9 @@ class Card extends Component {
     if (this.state.mode === MODES.RESOURCES_LIST) {
       return (
         <div className='card mb-4'>
-          <div className='card-header' data-toggle="collapse" data-target={'#' + this.state.resourceType.key}>
+          <div className='card-header'>
             <div className='row'>
-              <div className='col-6'>
+              <div className='col-6' data-toggle="collapse" data-target={'#' + this.state.resourceType.key}>
                 <h4 className='mb-0'>{this.state.resourceType.key}</h4>
               </div>
               <div className='col-6'>

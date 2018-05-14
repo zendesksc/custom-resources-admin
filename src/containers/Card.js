@@ -53,10 +53,11 @@ class Card extends Component {
   }
 
   handleNewResourceTypeFormSuccess(submittedResourceType) {
-    this.setState({
-      mode: MODES.RESOURCES_LIST,
-      resourceType: submittedResourceType
-    })
+    console.log(submittedResourceType)
+    // this.setState({
+    //   mode: MODES.RESOURCES_LIST,
+    //   resourceType: submittedResourceType
+    // })
   }
 
   render() {
@@ -67,7 +68,7 @@ class Card extends Component {
           <div className='card-header'>
             <div className='row'>
               <div className='col-12'>
-                <h4 className='mb-0'>Resource Type</h4>
+                <h4 className='mb-0'>New Resource Type</h4>
               </div>
             </div>
           </div>

@@ -55,7 +55,7 @@ class ResourceTypeList extends Component {
 
     let resourceTypes = this.state.resourceTypes.map((resourceType, index) =>
       <Card
-        key={index}
+        key={resourceType.key}
         resourceType={resourceType}
         onDelete={this.removeResourceTypeFromState}
       />

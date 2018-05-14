@@ -16,6 +16,17 @@ class ResourcesList extends Component {
     this.handleDeleteResource = this.handleDeleteResource.bind(this)
   }
 
+  componentDidMount() {
+    // Fetch resources from resource type
+    window.client.request({
+      url: '/api/custom_resources/resources?type=' + this.props.resourceType.key,
+      type: 'GET'
+    }).then((res) => {
+      // console.log(res)
+    })
+      .catch((err) => console.log(err))
+  }
+
   handleNewResource(e) {
     this.setState({
       isEditing: true
@@ -42,7 +53,7 @@ class ResourcesList extends Component {
 
   handleEditFormField(e) {
     let name = e.target.name
-    let value = e.target.value
+    let value = e.target
 
     this.setState({
       form: { ...this.state.form, [name]: { value: value, error: '' } }
@@ -64,7 +75,7 @@ class ResourcesList extends Component {
 
               <tr>
                 {this.props.resourceType.fields.map((field, index) => (
-                  <th key={index}>{field.name.value}</th>
+                  <th key={index}>{field.name}</th>
                 ))}
                 <th></th>
               </tr>
@@ -76,7 +87,7 @@ class ResourcesList extends Component {
                 <tr key={index}>
                   {this.props.resourceType.fields.map((field, index) => {
                     return (
-                      <td key={index}>{resource[field.name.value].value}</td>
+                      <td key={index}>{resource[field.name]}</td>
                     )
                   })}
                   <td><button className='btn btn-outline-danger' onClick={this.handleDeleteResource.bind(this, index)}>Delete</button></td>
@@ -87,8 +98,8 @@ class ResourcesList extends Component {
                 <tr>
                   {this.props.resourceType.fields.map((field, index) => (
                     <td key={index}>
-                      <input className='form-control' type='text' name={field.name.value} onChange={this.handleEditFormField} />
-                      <small className="form-text text-muted">{field.description.value}</small>
+                      <input className='form-control' type='text' name={field.name} onChange={this.handleEditFormField} />
+                      <small className="form-text text-muted">{field.description}</small>
                     </td>
                   ))}
                   <td>
@@ -102,7 +113,7 @@ class ResourcesList extends Component {
         </div>
         {!this.state.isEditing ?
           <div>
-            <button className='btn btn-link' onClick={this.handleNewResource} disabled={this.state.isEditing}>New {this.props.resourceType.title.value}</button>
+            <button className='btn btn-link' onClick={this.handleNewResource} disabled={this.state.isEditing}>New {this.props.resourceType.title}</button>
           </div>
           : null}
       </div>

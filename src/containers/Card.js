@@ -19,6 +19,39 @@ class Card extends Component {
     this.handleNewResourceTypeFormSuccess = this.handleNewResourceTypeFormSuccess.bind(this)
   }
 
+  componentDidMount() {
+    if (this.props.resourceType !== undefined) {
+      this.setState({
+        mode: MODES.RESOURCES_LIST,
+        resourceType: this.formatResourceType(this.props.resourceType)
+      })
+    }
+  }
+
+  formatResourceType(resourceType) {
+    // We've formatted the resourceType in a particular way that makes it easier to work
+    // with the data in React. This function basically converts the schema.properties
+    // into an array that can be mapped over in ResourcesList.
+
+    let fields = []
+    let rawProperties = resourceType.schema.properties
+
+    for (let key in rawProperties) {
+      fields.push({
+        name: key,
+        type: rawProperties[key].type,
+        description: rawProperties[key].description
+      })
+    }
+
+    return {
+      title: resourceType.key,
+      key: resourceType.key,
+      fields: fields
+    }
+
+  }
+
   handleNewResourceTypeFormSuccess(submittedResourceType) {
     this.setState({
       mode: MODES.RESOURCES_LIST,
@@ -52,7 +85,7 @@ class Card extends Component {
           <div className='card-header'>
             <div className='row'>
               <div className='col-12'>
-                <h4 className='mb-0'>{this.state.resourceType.title.value}</h4>
+                <h4 className='mb-0'>{this.state.resourceType.key}</h4>
               </div>
             </div>
           </div>

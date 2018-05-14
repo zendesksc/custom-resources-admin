@@ -89,14 +89,19 @@ class ResourcesList extends Component {
     })
   }
 
-  handleDeleteResource(index, e) {
-    this.setState({
-      resources: this.state.resources.filter((resource, i) => i !== index)
-    })
+  handleDeleteResource(id, e) {
+    // Delete a resource by id
+    window.client.request({
+      url: '/api/custom_resources/resources/' + id,
+      type: 'DELETE'
+    }).then((res) => {
+      this.setState({
+        resources: this.state.resources.filter((resource) => resource.id !== id)
+      })
+    }).catch((err) => console.log(err))
   }
 
   render() {
-
     if (this.state.isLoading) {
       return (
         <div>
@@ -120,14 +125,14 @@ class ResourcesList extends Component {
             </thead>
             <tbody>
 
-              {this.state.resources.map((resource, index) => (
-                <tr key={index}>
+              {this.state.resources.map((resource) => (
+                <tr key={resource.id}>
                   {this.props.resourceType.fields.map((field, index) => {
                     return (
                       <td key={index}>{resource.attributes[field.name]}</td>
                     )
                   })}
-                  <td><button className='btn btn-outline-danger' onClick={this.handleDeleteResource.bind(this, index)}>Delete</button></td>
+                  <td><button className='btn btn-outline-danger' onClick={this.handleDeleteResource.bind(this, resource.id)}>Delete</button></td>
                 </tr>
               ))}
 

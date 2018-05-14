@@ -5,6 +5,7 @@ class ResourcesList extends Component {
     super(props)
 
     this.state = {
+      isLoading: false,
       isEditing: false,
       resources: [],
       form: {}
@@ -22,7 +23,10 @@ class ResourcesList extends Component {
       url: '/api/custom_resources/resources?type=' + this.props.resourceType.key,
       type: 'GET'
     }).then((res) => {
-      // console.log(res)
+      this.setState({
+        resources: res.data
+      })
+      console.log(this.state)
     })
       .catch((err) => console.log(err))
   }
@@ -34,6 +38,11 @@ class ResourcesList extends Component {
   }
 
   handleSaveResource(e) {
+    // Set state to loading whilst resource is created
+    this.setState({
+      isLoading: true
+    })
+
     // TODO: Validate form
     let isValid = true
 
@@ -42,21 +51,41 @@ class ResourcesList extends Component {
     }
 
     if (isValid) {
-      // TODO: AJAX POST the new resource
-      this.setState({
-        isEditing: false,
-        resources: this.state.resources.concat(this.state.form),
-        form: {}
+
+      // Create the data object including the type of resource by key
+      let data = {
+        data: {
+          type: this.props.resourceType.key,
+          attributes: this.state.form
+        }
+      }
+
+      window.client.request({
+        url: '/api/custom_resources/resources',
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(data)
+      }).then((res) => {
+        // Push the newly created resource to the state array of resources
+        this.setState({
+          isEditing: false,
+          resources: this.state.resources.concat(res.data),
+          form: {},
+          isLoading: false
+        })
+      }).catch((err) => {
+        console.log(err)
       })
     }
   }
 
   handleEditFormField(e) {
     let name = e.target.name
-    let value = e.target
+    let value = e.target.value
 
     this.setState({
-      form: { ...this.state.form, [name]: { value: value, error: '' } }
+      form: { ...this.state.form, [name]: value }
     })
   }
 
@@ -67,6 +96,14 @@ class ResourcesList extends Component {
   }
 
   render() {
+
+    if (this.state.isLoading) {
+      return (
+        <div>
+          Loading...
+        </div>
+      )
+    }
     return (
       <div>
         <div>
@@ -87,7 +124,7 @@ class ResourcesList extends Component {
                 <tr key={index}>
                   {this.props.resourceType.fields.map((field, index) => {
                     return (
-                      <td key={index}>{resource[field.name]}</td>
+                      <td key={index}>{resource.attributes[field.name]}</td>
                     )
                   })}
                   <td><button className='btn btn-outline-danger' onClick={this.handleDeleteResource.bind(this, index)}>Delete</button></td>

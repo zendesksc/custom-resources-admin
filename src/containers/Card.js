@@ -70,7 +70,7 @@ class Card extends Component {
         <div className='card'>
           <div className='card-header'>
             <div className='row'>
-              <div className='col-12'>
+              <div className='col-6'>
                 <h4 className='mb-0'>New Resource Type</h4>
               </div>
             </div>
@@ -88,8 +88,11 @@ class Card extends Component {
         <div className='card mb-4'>
           <div className='card-header' data-toggle="collapse" data-target={'#' + this.state.resourceType.key}>
             <div className='row'>
-              <div className='col-12'>
+              <div className='col-6'>
                 <h4 className='mb-0'>{this.state.resourceType.key}</h4>
+              </div>
+              <div className='col-6'>
+                <button className='btn btn-outline-danger float-right'>Delete</button>
               </div>
             </div>
           </div>

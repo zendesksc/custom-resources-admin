@@ -26,7 +26,6 @@ class ResourcesList extends Component {
       this.setState({
         resources: res.data
       })
-      console.log(this.state)
     })
       .catch((err) => console.log(err))
   }

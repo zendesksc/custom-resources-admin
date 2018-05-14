@@ -17,6 +17,7 @@ class Card extends Component {
     }
 
     this.handleNewResourceTypeFormSuccess = this.handleNewResourceTypeFormSuccess.bind(this)
+    this.handleDeleteResourceType = this.handleDeleteResourceType.bind(this)
   }
 
   componentDidMount() {
@@ -24,10 +25,6 @@ class Card extends Component {
       this.setState({
         mode: MODES.RESOURCES_LIST,
         resourceType: this.formatResourceType(this.props.resourceType)
-      })
-    } else {
-      this.setState({
-        resourceType: {}
       })
     }
   }
@@ -63,8 +60,17 @@ class Card extends Component {
     this.props.onNewResourceTypeSuccess(submittedResourceType)
   }
 
-  render() {
+  handleDeleteResourceType() {
+    let key = this.state.resourceType.key
 
+    window.client.request({
+      url: '/api/custom_resources/resource_types/' + key,
+      type: 'DELETE'
+    }).then((res) => this.props.onDelete(key))
+      .catch((err) => console.log(err))
+  }
+
+  render() {
     if (this.state.mode === MODES.NEW_RESOURCE_TYPE_FORM) {
       return (
         <div className='card'>
@@ -92,7 +98,11 @@ class Card extends Component {
                 <h4 className='mb-0'>{this.state.resourceType.key}</h4>
               </div>
               <div className='col-6'>
-                <button className='btn btn-outline-danger float-right'>Delete</button>
+                <button
+                  className='btn btn-outline-danger float-right'
+                  onClick={this.handleDeleteResourceType}>
+                  Delete
+                </button>
               </div>
             </div>
           </div>

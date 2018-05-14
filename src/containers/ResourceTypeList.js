@@ -11,6 +11,7 @@ class ResourceTypeList extends Component {
     }
 
     this.addSubmittedResourceTypeToState = this.addSubmittedResourceTypeToState.bind(this)
+    this.removeResourceTypeFromState = this.removeResourceTypeFromState.bind(this)
   }
 
   componentDidMount() {
@@ -37,6 +38,12 @@ class ResourceTypeList extends Component {
     })
   }
 
+  removeResourceTypeFromState(key) {
+    this.setState({
+      resourceTypes: this.state.resourceTypes.filter((resourceType) => resourceType.key !== key)
+    })
+  }
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -50,6 +57,7 @@ class ResourceTypeList extends Component {
       <Card
         key={index}
         resourceType={resourceType}
+        onDelete={this.removeResourceTypeFromState}
       />
     )
 

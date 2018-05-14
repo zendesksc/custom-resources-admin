@@ -53,11 +53,10 @@ class Card extends Component {
   }
 
   handleNewResourceTypeFormSuccess(submittedResourceType) {
-    console.log(submittedResourceType)
-    // this.setState({
-    //   mode: MODES.RESOURCES_LIST,
-    //   resourceType: submittedResourceType
-    // })
+    this.setState({
+      mode: MODES.RESOURCES_LIST,
+      resourceType: submittedResourceType
+    })
   }
 
   render() {

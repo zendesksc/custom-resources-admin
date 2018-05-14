@@ -9,14 +9,8 @@ class NewResourceTypeForm extends Component {
 
     this.state = {
       error: '',
-      title: {
-        value: '',
-        error: ''
-      },
-      key: {
-        value: '',
-        error: ''
-      },
+      title: '',
+      key: '',
       fields: []
     }
 
@@ -28,8 +22,8 @@ class NewResourceTypeForm extends Component {
 
   handleSystemFieldChange(e) {
     this.setState({
-      title: { value: e.target.value, error: '' },
-      key: { value: slugify(e.target.value), error: '' }
+      title: e.target.value,
+      key: slugify(e.target.value)
     })
   }
 
@@ -39,11 +33,10 @@ class NewResourceTypeForm extends Component {
 
     this.setState({
       fields: this.state.fields.map((field, i) => {
+        console.log(field)
         if (i === index) return {
-          ...field, [name]: {
-            // Force name to be lowercase
-            value: name === 'name' ? value.toLowerCase() : value, error: ''
-          }
+          // Force name to be lowercase
+          ...field, [name]: name === 'name' ? value.toLowerCase() : value
         }
         return field
       })
@@ -53,18 +46,9 @@ class NewResourceTypeForm extends Component {
   handleAddNewField(e) {
     this.setState({
       fields: this.state.fields.concat({
-        name: {
-          value: '',
-          error: ''
-        },
-        type: {
-          value: 'string',
-          error: ''
-        },
-        description: {
-          value: '',
-          error: ''
-        }
+        name: '',
+        type: 'string',
+        description: ''
       })
     })
   }
@@ -130,16 +114,16 @@ class NewResourceTypeForm extends Component {
     let required = []
 
     this.state.fields.forEach((field) => {
-      properties[field.name.value] = {}
-      properties[field.name.value].type = 'string'
-      properties[field.name.value].description = field.description.value
-      required.push(field.name.value)
+      properties[field.name] = {}
+      properties[field.name].type = 'string'
+      properties[field.name].description = field.description
+      required.push(field.name)
     })
 
     let data = {
       data: {
-        title: this.state.title.value,
-        key: this.state.key.value,
+        title: this.state.title,
+        key: this.state.key,
         schema: {
           properties: properties,
           required: required
@@ -154,19 +138,8 @@ class NewResourceTypeForm extends Component {
       contentType: 'application/json',
       data: JSON.stringify(data)
     }).then(response => this.props.onSuccess(this.state))
-      .catch(error => {
-
-        // This is the error if there is a network request issue
-        this.setState({
-          error: 'An error occured when submitting the resource type, please check the data and submit again.'
-        })
-
-        // This error displays if there is an error with the data the user has input to the form
-        if (error.errors.length > 0) {
-          this.setState({
-            error: 'An error occured when submitting the resource type, please check the data and submit again.'
-          })
-        }
+      .catch(err => {
+        console.log(err)
         return
       })
 
@@ -179,9 +152,9 @@ class NewResourceTypeForm extends Component {
         {this.state.error ?
           <div className='row'>
             <div className='col-12'>
-              <div class="alert alert-danger alert-dismissible text-center fade show" role="alert">
+              <div className="alert alert-danger alert-dismissible text-center fade show" role="alert">
                 {this.state.error}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button type="button" className="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
@@ -191,10 +164,10 @@ class NewResourceTypeForm extends Component {
 
         <div className='row'>
           <div className='col-6'>
-            <TextField label='Title' name='title' value={this.state.title.value} error={this.state.title.error} onChange={this.handleSystemFieldChange} />
+            <TextField label='Title' name='title' value={this.state.title} error={this.state.title.error} onChange={this.handleSystemFieldChange} />
           </div>
           <div className='col-6'>
-            <TextField label='Key' name='key' value={this.state.key.value} disabled error={this.state.key.error} />
+            <TextField label='Key' name='key' value={this.state.key} disabled error={this.state.key.error} />
           </div>
         </div>
 
@@ -205,7 +178,7 @@ class NewResourceTypeForm extends Component {
               <div className='card-header' data-toggle="collapse" data-target={'#field' + index}>
                 <h5 className='mb-0 float-left'>
                   <button className="btn btn-link">
-                    {field.name.value !== '' ? field.name.value : 'New Field'}
+                    {field.name !== '' ? field.name : 'New Field'}
                   </button>
                 </h5>
                 <button className='btn btn-outline-danger float-right' onClick={this.handleDeleteField.bind(this, index)}>Delete field</button>
@@ -215,10 +188,10 @@ class NewResourceTypeForm extends Component {
                 <div className='card-body'>
                   <div className='row'>
                     <div className='col-6'>
-                      <TextField label='Name' name='name' value={field.name.value} error={field.name.error} onChange={this.handleFieldChange.bind(this, index)} />
+                      <TextField label='Name' name='name' value={field.name} error={field.name.error} onChange={this.handleFieldChange.bind(this, index)} />
                     </div>
                     <div className='col-6'>
-                      <TextField label='Description' name='description' value={field.description.value} error={field.description.error} onChange={this.handleFieldChange.bind(this, index)} />
+                      <TextField label='Description' name='description' value={field.description} error={field.description.error} onChange={this.handleFieldChange.bind(this, index)} />
                     </div>
                   </div>
                 </div>

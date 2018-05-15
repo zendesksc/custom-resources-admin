@@ -8,7 +8,8 @@ class NewResourceTypeForm extends Component {
     super(props)
 
     this.state = {
-      error: '',
+      hasError: false,
+      errors: [],
       title: '',
       key: '',
       fields: []
@@ -23,7 +24,9 @@ class NewResourceTypeForm extends Component {
   handleSystemFieldChange(e) {
     this.setState({
       title: e.target.value,
-      key: slugify(e.target.value)
+      key: slugify(e.target.value),
+      errors: [],
+      hasError: false
     })
   }
 
@@ -32,6 +35,8 @@ class NewResourceTypeForm extends Component {
     let value = e.target.value
 
     this.setState({
+      errors: [],
+      hasError: false,
       fields: this.state.fields.map((field, i) => {
         if (i === index) return {
           // Force name to be lowercase
@@ -98,7 +103,10 @@ class NewResourceTypeForm extends Component {
       this.props.onSuccess(res.data)
     })
       .catch(err => {
-        console.log(err)
+        this.setState({
+          hasError: true,
+          errors: err.responseJSON.errors
+        })
         return
       })
 
@@ -108,11 +116,13 @@ class NewResourceTypeForm extends Component {
     return (
       <div>
 
-        {this.state.error ?
+        {this.state.hasError ?
           <div className='row'>
             <div className='col-12'>
-              <div className="alert alert-danger alert-dismissible text-center fade show" role="alert">
-                {this.state.error}
+              <div className="alert alert-danger alert-dismissiblefade show" role="alert">
+                {this.state.errors.map((error, index) => (
+                  <span key={index}><strong>{error.title}</strong> - {error.detail}</span>
+                ))}
                 <button type="button" className="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>

@@ -58,57 +58,7 @@ class NewResourceTypeForm extends Component {
     })
   }
 
-  checkIsValid() {
-    let isValid = true
-
-    if (this.state.title.value === '') {
-      this.setState({
-        title: { ...this.state.title, error: 'Title cannot be blank.' }
-      })
-      isValid = false
-    }
-
-    if (this.state.key.value === '') {
-      this.setState({
-        key: { ...this.state.key, error: 'Key cannot be blank.' }
-      })
-      isValid = false
-    }
-
-    this.state.fields.forEach((field, index) => {
-
-      if (field.name.value === '') {
-        this.setState({
-          fields: this.state.fields.map((field, i) => {
-            if (i === index) {
-              field.name.error = 'Name cannot be blank.'
-            }
-            return field
-          })
-        })
-        isValid = false
-      }
-
-      if (field.description.value === '') {
-        this.setState({
-          fields: this.state.fields.map((field, i) => {
-            if (i === index) {
-              field.description.error = 'Description cannot be blank.'
-            }
-            return field
-          })
-        })
-        isValid = false
-      }
-
-    })
-
-    return isValid
-  }
-
   handleSubmit() {
-    if (!this.checkIsValid()) return
-
     let properties = {}
     let required = []
 

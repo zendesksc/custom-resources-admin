@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import NewResourceTypeForm from './NewResourceTypeForm';
 import ResourcesList from './ResourcesList';
+import ErrorMessage from '../components/ErrorMessage';
 
 const MODES = {
   NEW_RESOURCE_TYPE_FORM: 0,
@@ -20,6 +21,7 @@ class Card extends Component {
 
     this.handleNewResourceTypeFormSuccess = this.handleNewResourceTypeFormSuccess.bind(this)
     this.handleDeleteResourceType = this.handleDeleteResourceType.bind(this)
+    this.handleNewError = this.handleNewError.bind(this)
   }
 
   componentDidMount() {
@@ -57,6 +59,8 @@ class Card extends Component {
 
   handleNewResourceTypeFormSuccess(submittedResourceType) {
     this.setState({
+      hasError: false,
+      errors: [],
       resourceType: this.formatResourceType(submittedResourceType)
     })
     this.props.onNewResourceTypeSuccess(submittedResourceType)
@@ -77,6 +81,13 @@ class Card extends Component {
       })
   }
 
+  handleNewError(errors) {
+    this.setState({
+      hasError: true,
+      errors
+    })
+  }
+
   render() {
     if (this.state.mode === MODES.NEW_RESOURCE_TYPE_FORM) {
       return (
@@ -89,7 +100,9 @@ class Card extends Component {
             </div>
           </div>
           <div className='card-body'>
+            {this.state.hasError ? <ErrorMessage errors={this.state.errors} /> : null}
             <NewResourceTypeForm
+              onError={this.handleNewError}
               onSuccess={this.handleNewResourceTypeFormSuccess} />
           </div>
         </div>
@@ -115,21 +128,10 @@ class Card extends Component {
           </div>
           <div className='collapse show' id={this.state.resourceType.key}>
             <div className='card-body'>
-              {this.state.hasError ?
-                <div className='row'>
-                  <div className='col-12'>
-                    <div className="alert alert-danger alert-dismissiblefade show" role="alert">
-                      {this.state.errors.map((error, index) => (
-                        <span key={index}><strong>{error.title}</strong> - {error.detail}</span>
-                      ))}
-                      <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                : null}
-              <ResourcesList resourceType={this.state.resourceType} />
+              {this.state.hasError ? <ErrorMessage errors={this.state.errors} /> : null}
+              <ResourcesList
+                onError={this.handleNewError}
+                resourceType={this.state.resourceType} />
             </div>
           </div>
         </div>

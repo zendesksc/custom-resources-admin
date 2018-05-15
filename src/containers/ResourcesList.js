@@ -7,6 +7,8 @@ class ResourcesList extends Component {
     this.state = {
       isLoading: false,
       isEditing: false,
+      hasErrors: false,
+      errors: [],
       resources: [],
       form: {}
     }
@@ -74,9 +76,18 @@ class ResourcesList extends Component {
           isLoading: false
         })
       }).catch((err) => {
-        console.log(err)
+        this.setState({
+          hasError: true,
+          errors: err.responseJSON.errors
+        })
+      })
+
+    } else {
+      this.setState({
+        isLoading: false
       })
     }
+
   }
 
   handleEditFormField(e) {
@@ -97,7 +108,12 @@ class ResourcesList extends Component {
       this.setState({
         resources: this.state.resources.filter((resource) => resource.id !== id)
       })
-    }).catch((err) => console.log(err))
+    }).catch((err) => {
+      this.setState({
+        hasError: true,
+        errors: err.responseJSON.errors
+      })
+    })
   }
 
   render() {
@@ -108,8 +124,25 @@ class ResourcesList extends Component {
         </div>
       )
     }
+
     return (
       <div>
+
+        {this.state.hasError ?
+          <div className='row'>
+            <div className='col-12'>
+              <div className="alert alert-danger alert-dismissiblefade show" role="alert">
+                {this.state.errors.map((error, index) => (
+                  <span key={index}><strong>{error.title}</strong> - {error.detail}</span>
+                ))}
+                <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          : null}
+
         <div>
           <table className='table'>
             <thead>

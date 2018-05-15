@@ -12,6 +12,8 @@ class Card extends Component {
     super(props)
 
     this.state = {
+      hasError: false,
+      errors: [],
       mode: MODES.NEW_RESOURCE_TYPE_FORM,
       resourceType: {}
     }
@@ -67,7 +69,12 @@ class Card extends Component {
       url: '/api/custom_resources/resource_types/' + key,
       type: 'DELETE'
     }).then((res) => this.props.onDelete(key))
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        this.setState({
+          hasError: true,
+          errors: err.responseJSON.errors
+        })
+      })
   }
 
   render() {
@@ -108,6 +115,20 @@ class Card extends Component {
           </div>
           <div className='collapse show' id={this.state.resourceType.key}>
             <div className='card-body'>
+              {this.state.hasError ?
+                <div className='row'>
+                  <div className='col-12'>
+                    <div className="alert alert-danger alert-dismissiblefade show" role="alert">
+                      {this.state.errors.map((error, index) => (
+                        <span key={index}><strong>{error.title}</strong> - {error.detail}</span>
+                      ))}
+                      <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                : null}
               <ResourcesList resourceType={this.state.resourceType} />
             </div>
           </div>

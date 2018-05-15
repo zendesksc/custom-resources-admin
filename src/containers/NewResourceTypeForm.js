@@ -8,14 +8,8 @@ class NewResourceTypeForm extends Component {
     super(props)
 
     this.state = {
-      title: {
-        value: '',
-        error: ''
-      },
-      key: {
-        value: '',
-        error: ''
-      },
+      title: '',
+      key: '',
       fields: []
     }
 
@@ -27,8 +21,8 @@ class NewResourceTypeForm extends Component {
 
   handleSystemFieldChange(e) {
     this.setState({
-      title: { value: e.target.value, error: '' },
-      key: { value: slugify(e.target.value), error: '' }
+      title: e.target.value,
+      key: slugify(e.target.value)
     })
   }
 
@@ -38,7 +32,10 @@ class NewResourceTypeForm extends Component {
 
     this.setState({
       fields: this.state.fields.map((field, i) => {
-        if (i === index) return { ...field, [name]: { value: value, error: '' } }
+        if (i === index) return {
+          // Force name to be lowercase
+          ...field, [name]: name === 'name' ? value.toLowerCase() : value
+        }
         return field
       })
     })
@@ -47,18 +44,9 @@ class NewResourceTypeForm extends Component {
   handleAddNewField(e) {
     this.setState({
       fields: this.state.fields.concat({
-        name: {
-          value: '',
-          error: ''
-        },
-        type: {
-          value: 'string',
-          error: ''
-        },
-        description: {
-          value: '',
-          error: ''
-        }
+        name: '',
+        type: 'string',
+        description: ''
       })
     })
   }
@@ -69,58 +57,49 @@ class NewResourceTypeForm extends Component {
     })
   }
 
-  checkIsValid() {
-    let isValid = true
+  handleSubmit() {
+    let properties = {}
+    let required = []
 
-    if (this.state.title.value === '') {
-      this.setState({
-        title: { ...this.state.title, error: 'Title cannot be blank.' }
-      })
-      isValid = false
-    }
-
-    if (this.state.key.value === '') {
-      this.setState({
-        key: { ...this.state.key, error: 'Key cannot be blank.' }
-      })
-      isValid = false
-    }
-
-    this.state.fields.forEach((field, index) => {
-
-      if (field.name.value === '') {
-        this.setState({
-          fields: this.state.fields.map((field, i) => {
-            if (i === index) {
-              field.name.error = 'Name cannot be blank.'
-            }
-            return field
-          })
-        })
-        isValid = false
-      }
-
-      if (field.description.value === '') {
-        this.setState({
-          fields: this.state.fields.map((field, i) => {
-            if (i === index) {
-              field.description.error = 'Description cannot be blank.'
-            }
-            return field
-          })
-        })
-        isValid = false
-      }
-
+    this.state.fields.forEach((field) => {
+      properties[field.name] = {}
+      properties[field.name].type = 'string'
+      properties[field.name].description = field.description
+      required.push(field.name)
     })
 
-    return isValid
-  }
+    let data = {
+      data: {
+        title: this.state.title,
+        key: this.state.key,
+        schema: {
+          properties: properties,
+          required: required
+        }
+      }
+    }
 
-  handleSubmit() {
-    if (!this.checkIsValid()) return
-    // Push the resource object to the parent when sucessfully submitted
-    this.props.onSuccess(this.state)
+    window.client.request({
+      url: '/api/custom_resources/resource_types',
+      type: 'POST',
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify(data)
+    }).then(res => {
+      this.setState(
+        {
+          title: '',
+          key: '',
+          fields: []
+        }
+      )
+      this.props.onSuccess(res.data)
+    })
+      .catch(err => {
+        this.props.onError(err.responseJSON.errors)
+        return
+      })
+
   }
 
   render() {
@@ -129,10 +108,10 @@ class NewResourceTypeForm extends Component {
 
         <div className='row'>
           <div className='col-6'>
-            <TextField label='Title' name='title' value={this.state.title.value} error={this.state.title.error} onChange={this.handleSystemFieldChange} />
+            <TextField label='Title' name='title' value={this.state.title} onChange={this.handleSystemFieldChange} />
           </div>
           <div className='col-6'>
-            <TextField label='Key' name='key' value={this.state.key.value} disabled error={this.state.key.error} />
+            <TextField label='Key' name='key' value={this.state.key} disabled />
           </div>
         </div>
 
@@ -143,7 +122,7 @@ class NewResourceTypeForm extends Component {
               <div className='card-header' data-toggle="collapse" data-target={'#field' + index}>
                 <h5 className='mb-0 float-left'>
                   <button className="btn btn-link">
-                    {field.name.value !== '' ? field.name.value : 'New Field'}
+                    {field.name !== '' ? field.name : 'New Field'}
                   </button>
                 </h5>
                 <button className='btn btn-outline-danger float-right' onClick={this.handleDeleteField.bind(this, index)}>Delete field</button>
@@ -153,10 +132,10 @@ class NewResourceTypeForm extends Component {
                 <div className='card-body'>
                   <div className='row'>
                     <div className='col-6'>
-                      <TextField label='Name' name='name' value={field.name.value} error={field.name.error} onChange={this.handleFieldChange.bind(this, index)} />
+                      <TextField label='Name' name='name' value={field.name} onChange={this.handleFieldChange.bind(this, index)} />
                     </div>
                     <div className='col-6'>
-                      <TextField label='Description' name='description' value={field.description.value} error={field.description.error} onChange={this.handleFieldChange.bind(this, index)} />
+                      <TextField label='Description' name='description' value={field.description} onChange={this.handleFieldChange.bind(this, index)} />
                     </div>
                   </div>
                 </div>

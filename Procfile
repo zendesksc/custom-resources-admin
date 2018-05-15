@@ -1,2 +1,2 @@
-react: yarn watch
+react: yarn start
 zat: zat server --path dist

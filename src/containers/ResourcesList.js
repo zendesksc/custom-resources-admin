@@ -5,6 +5,7 @@ class ResourcesList extends Component {
     super(props)
 
     this.state = {
+      isLoading: false,
       isEditing: false,
       resources: [],
       form: {}
@@ -16,6 +17,19 @@ class ResourcesList extends Component {
     this.handleDeleteResource = this.handleDeleteResource.bind(this)
   }
 
+  componentDidMount() {
+    // Fetch resources from resource type
+    window.client.request({
+      url: '/api/custom_resources/resources?type=' + this.props.resourceType.key,
+      type: 'GET'
+    }).then((res) => {
+      this.setState({
+        resources: res.data
+      })
+    })
+      .catch((err) => this.props.onError(err.responseJSON.errors))
+  }
+
   handleNewResource(e) {
     this.setState({
       isEditing: true
@@ -23,6 +37,11 @@ class ResourcesList extends Component {
   }
 
   handleSaveResource(e) {
+    // Set state to loading whilst resource is created
+    this.setState({
+      isLoading: true
+    })
+
     // TODO: Validate form
     let isValid = true
 
@@ -31,13 +50,39 @@ class ResourcesList extends Component {
     }
 
     if (isValid) {
-      // TODO: AJAX POST the new resource
+
+      // Create the data object including the type of resource by key
+      let data = {
+        data: {
+          type: this.props.resourceType.key,
+          attributes: this.state.form
+        }
+      }
+
+      window.client.request({
+        url: '/api/custom_resources/resources',
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(data)
+      }).then((res) => {
+        // Push the newly created resource to the state array of resources
+        this.setState({
+          isEditing: false,
+          resources: this.state.resources.concat(res.data),
+          form: {},
+          isLoading: false
+        })
+      }).catch((err) => {
+        this.props.onError(err.responseJSON.errors)
+      })
+
+    } else {
       this.setState({
-        isEditing: false,
-        resources: this.state.resources.concat(this.state.form),
-        form: {}
+        isLoading: false
       })
     }
+
   }
 
   handleEditFormField(e) {
@@ -45,26 +90,43 @@ class ResourcesList extends Component {
     let value = e.target.value
 
     this.setState({
-      form: { ...this.state.form, [name]: { value: value, error: '' } }
+      form: { ...this.state.form, [name]: value }
     })
   }
 
-  handleDeleteResource(index, e) {
-    this.setState({
-      resources: this.state.resources.filter((resource, i) => i !== index)
+  handleDeleteResource(id, e) {
+    // Delete a resource by id
+    window.client.request({
+      url: '/api/custom_resources/resources/' + id,
+      type: 'DELETE'
+    }).then((res) => {
+      this.setState({
+        resources: this.state.resources.filter((resource) => resource.id !== id)
+      })
+    }).catch((err) => {
+      this.props.onError(err.responseJSON.errors)
     })
   }
 
   render() {
+    if (this.state.isLoading) {
+      return (
+        <div>
+          Loading...
+        </div>
+      )
+    }
+
     return (
       <div>
+
         <div>
           <table className='table'>
             <thead>
 
               <tr>
                 {this.props.resourceType.fields.map((field, index) => (
-                  <th key={index}>{field.name.value}</th>
+                  <th key={index}>{field.name}</th>
                 ))}
                 <th></th>
               </tr>
@@ -72,14 +134,14 @@ class ResourcesList extends Component {
             </thead>
             <tbody>
 
-              {this.state.resources.map((resource, index) => (
-                <tr key={index}>
+              {this.state.resources.map((resource) => (
+                <tr key={resource.id}>
                   {this.props.resourceType.fields.map((field, index) => {
                     return (
-                      <td key={index}>{resource[field.name.value].value}</td>
+                      <td key={index}>{resource.attributes[field.name]}</td>
                     )
                   })}
-                  <td><button className='btn btn-outline-danger' onClick={this.handleDeleteResource.bind(this, index)}>Delete</button></td>
+                  <td><button className='btn btn-outline-danger' onClick={this.handleDeleteResource.bind(this, resource.id)}>Delete</button></td>
                 </tr>
               ))}
 
@@ -87,8 +149,8 @@ class ResourcesList extends Component {
                 <tr>
                   {this.props.resourceType.fields.map((field, index) => (
                     <td key={index}>
-                      <input className='form-control' type='text' name={field.name.value} onChange={this.handleEditFormField} />
-                      <small className="form-text text-muted">{field.description.value}</small>
+                      <input className='form-control' type='text' name={field.name} onChange={this.handleEditFormField} />
+                      <small className="form-text text-muted">{field.description}</small>
                     </td>
                   ))}
                   <td>
@@ -102,7 +164,7 @@ class ResourcesList extends Component {
         </div>
         {!this.state.isEditing ?
           <div>
-            <button className='btn btn-link' onClick={this.handleNewResource} disabled={this.state.isEditing}>New {this.props.resourceType.title.value}</button>
+            <button className='btn btn-link' onClick={this.handleNewResource} disabled={this.state.isEditing}>New {this.props.resourceType.title}</button>
           </div>
           : null}
       </div>

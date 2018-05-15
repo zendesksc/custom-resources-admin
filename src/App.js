@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Card from './containers/Card'
+import ResourceTypeList from './containers/ResourceTypeList';
+
 
 class App extends Component {
   render() {
@@ -7,7 +8,7 @@ class App extends Component {
       <div className='container pt-5 pb-5'>
         <div className='row'>
           <div className='col-12'>
-            <Card />
+            <ResourceTypeList />
           </div>
         </div>
       </div>

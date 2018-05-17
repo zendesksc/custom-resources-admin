@@ -79,22 +79,83 @@ class NewResourceTypeForm extends Component {
       }
     }
 
+    let createdResource = {}
+
     window.client.request({
       url: '/api/custom_resources/resource_types',
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(data)
-    }).then(res => {
-      this.setState(
-        {
-          title: '',
-          key: '',
-          fields: []
-        }
-      )
-      this.props.onSuccess(res.data)
     })
+      .then((res) => {
+        // Cache resturned data to send to props later
+        createdResource = res.data
+
+        let relationshipTypesPromises = []
+
+        // Create the relationship type
+        relationshipTypesPromises.push(
+          window.client.request({
+            url: '/api/custom_resources/relationship_types',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+              data: {
+                key: createdResource.key + '_has_many_users',
+                source: createdResource.key,
+                target: ['zen:user']
+              }
+            })
+          })
+        )
+
+        relationshipTypesPromises.push(
+          window.client.request({
+            url: '/api/custom_resources/relationship_types',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+              data: {
+                key: createdResource.key + '_has_many_tickets',
+                source: createdResource.key,
+                target: ['zen:ticket']
+              }
+            })
+          })
+        )
+
+        relationshipTypesPromises.push(
+          window.client.request({
+            url: '/api/custom_resources/relationship_types',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+              data: {
+                key: createdResource.key + '_has_many_organizations',
+                source: createdResource.key,
+                target: ['zen:organization']
+              }
+            })
+          })
+        )
+
+        return Promise.all(relationshipTypesPromises)
+
+      })
+      .then(res => {
+        this.setState(
+          {
+            title: '',
+            key: '',
+            fields: []
+          }
+        )
+        this.props.onSuccess(createdResource)
+      })
       .catch(err => {
         this.props.onError(err.responseJSON.errors)
         return

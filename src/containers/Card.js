@@ -72,7 +72,35 @@ class Card extends Component {
     window.client.request({
       url: '/api/custom_resources/resource_types/' + key,
       type: 'DELETE'
-    }).then((res) => this.props.onDelete(key))
+    })
+      .then((res) => {
+        // When we delete a resource type, we need to delete all associated relationship types.
+        let relationshipTypesPromises = []
+
+        relationshipTypesPromises.push(
+          window.client.request({
+            url: '/api/custom_resources/relationship_types/' + key + '_has_many_users',
+            type: 'DELETE'
+          })
+        )
+
+        relationshipTypesPromises.push(
+          window.client.request({
+            url: '/api/custom_resources/relationship_types/' + key + '_has_many_tickets',
+            type: 'DELETE'
+          })
+        )
+
+        relationshipTypesPromises.push(
+          window.client.request({
+            url: '/api/custom_resources/relationship_types/' + key + '_has_many_organizations',
+            type: 'DELETE'
+          })
+        )
+
+        return Promise.all(relationshipTypesPromises)
+      })
+      .then((res) => this.props.onDelete(key))
       .catch((err) => {
         this.setState({
           hasError: true,

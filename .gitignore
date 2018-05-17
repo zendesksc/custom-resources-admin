@@ -24,3 +24,6 @@ yarn-error.log*
 /dist/assets/static
 /dist/assets/asset-manifest.json
 /dist/assets/service-worker.js
+
+# remove zat
+.zat

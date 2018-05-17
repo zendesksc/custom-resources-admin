@@ -74,29 +74,20 @@ class Card extends Component {
       type: 'DELETE'
     })
       .then((res) => {
+        // Define each relationship type name
+        let relationshipTypes = ['users', 'tickets', 'organizations']
+
         // When we delete a resource type, we need to delete all associated relationship types.
         let relationshipTypesPromises = []
 
-        relationshipTypesPromises.push(
-          window.client.request({
-            url: '/api/custom_resources/relationship_types/' + key + '_has_many_users',
-            type: 'DELETE'
-          })
-        )
-
-        relationshipTypesPromises.push(
-          window.client.request({
-            url: '/api/custom_resources/relationship_types/' + key + '_has_many_tickets',
-            type: 'DELETE'
-          })
-        )
-
-        relationshipTypesPromises.push(
-          window.client.request({
-            url: '/api/custom_resources/relationship_types/' + key + '_has_many_organizations',
-            type: 'DELETE'
-          })
-        )
+        relationshipTypes.forEach((type) => {
+          relationshipTypesPromises.push(
+            window.client.request({
+              url: '/api/custom_resources/relationship_types/' + key + '_has_many_' + type,
+              type: 'DELETE'
+            })
+          )
+        })
 
         return Promise.all(relationshipTypesPromises)
       })

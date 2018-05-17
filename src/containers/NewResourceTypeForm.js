@@ -92,56 +92,33 @@ class NewResourceTypeForm extends Component {
         // Cache resturned data to send to props later
         createdResource = res.data
 
+        // Define each relationship type (only the parts that change)
+        let relationshipTypes = [
+          { key: 'users', target: 'zen:user' },
+          { key: 'tickets', target: 'zen:ticket' },
+          { key: 'organizations', target: 'zen:organization' }
+        ]
+
         let relationshipTypesPromises = []
 
-        // Create the relationship type
-        relationshipTypesPromises.push(
-          window.client.request({
-            url: '/api/custom_resources/relationship_types',
-            type: 'POST',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: JSON.stringify({
-              data: {
-                key: createdResource.key + '_has_many_users',
-                source: createdResource.key,
-                target: ['zen:user']
-              }
+        relationshipTypes.forEach((type) => {
+          // Create the relationship type
+          relationshipTypesPromises.push(
+            window.client.request({
+              url: '/api/custom_resources/relationship_types',
+              type: 'POST',
+              dataType: 'json',
+              contentType: 'application/json',
+              data: JSON.stringify({
+                data: {
+                  key: createdResource.key + '_has_many_' + type.key,
+                  source: createdResource.key,
+                  target: [type.target]
+                }
+              })
             })
-          })
-        )
-
-        relationshipTypesPromises.push(
-          window.client.request({
-            url: '/api/custom_resources/relationship_types',
-            type: 'POST',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: JSON.stringify({
-              data: {
-                key: createdResource.key + '_has_many_tickets',
-                source: createdResource.key,
-                target: ['zen:ticket']
-              }
-            })
-          })
-        )
-
-        relationshipTypesPromises.push(
-          window.client.request({
-            url: '/api/custom_resources/relationship_types',
-            type: 'POST',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: JSON.stringify({
-              data: {
-                key: createdResource.key + '_has_many_organizations',
-                source: createdResource.key,
-                target: ['zen:organization']
-              }
-            })
-          })
-        )
+          )
+        })
 
         return Promise.all(relationshipTypesPromises)
 

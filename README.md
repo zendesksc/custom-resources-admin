@@ -1,6 +1,6 @@
-# Custom Resources
+# Custom Resources Admin
 
-An app to display the functionality of Custom Resources in Zendesk.
+An app to display the functionality of Custom Resources in Zendesk. It allows you to create resource types, and resources. The app automatically generates relationship types between custom resource types and tickets, users, and organizations.
 
 ## Getting started
 

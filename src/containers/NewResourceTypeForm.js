@@ -111,9 +111,9 @@ class NewResourceTypeForm extends Component {
               contentType: 'application/json',
               data: JSON.stringify({
                 data: {
-                  key: createdResource.key + '_has_many_' + type.key,
-                  source: createdResource.key,
-                  target: [type.target]
+                  key: type.key + '_' + createdResource.key + 's',
+                  source: type.target,
+                  target: [createdResource.key]
                 }
               })
             })

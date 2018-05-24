@@ -83,7 +83,7 @@ class Card extends Component {
         relationshipTypes.forEach((type) => {
           relationshipTypesPromises.push(
             window.client.request({
-              url: '/api/custom_resources/relationship_types/' + key + '_has_many_' + type,
+              url: '/api/custom_resources/relationship_types/' + type + '_' + key + 's',
               type: 'DELETE'
             })
           )

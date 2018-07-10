@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import ResourceTypeList from './containers/ResourceTypeList';
-
+import logo from './logo.svg';
+import './App.css';
 
 class App extends Component {
   render() {
     return (
-      <div className='container pt-5 pb-5'>
-        <div className='row'>
-          <div className='col-12'>
-            <ResourceTypeList />
-          </div>
-        </div>
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h1 className="App-title">Welcome to React</h1>
+        </header>
+        <p className="App-intro">
+          To get started, edit <code>src/App.js</code> and save to reload.
+        </p>
       </div>
     );
   }

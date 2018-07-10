@@ -33,4 +33,4 @@ rm dist/manifest.json-e
 rm -rf build
 
 # Echo message to show compilation has completed.
-echo "Custom Resources Viewer app has been compiled to ~/Desktop/Custom Resources Amin.zip"
+echo "Custom Resources Viewer app has been compiled to ~/Desktop/Custom Resources Admin.zip"

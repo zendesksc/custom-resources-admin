@@ -23,7 +23,7 @@ rm dist/manifest.json-e
 zat package --path dist
 
 # Move the compiled app to the Desktop
-mv dist/tmp/app*.zip ~/Desktop/Custom\ Resources\ Viewer.zip
+mv dist/tmp/app*.zip ~/Desktop/Custom\ Resources\ Admin.zip
 
 # Revert the project back to a clean state
 rm dist/.zat dist/assets/index.html dist/assets/main.*.js dist/assets/main.*.css
@@ -33,4 +33,4 @@ rm dist/manifest.json-e
 rm -rf build
 
 # Echo message to show compilation has completed.
-echo "Custom Resources Viewer app has been compiled to ~/Desktop/Custom Resources Viewer.zip"
+echo "Custom Resources Viewer app has been compiled to ~/Desktop/Custom Resources Amin.zip"

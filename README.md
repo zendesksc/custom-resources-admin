@@ -20,5 +20,5 @@ $ nf start
 ## Deploying to Zendesk
 
 ```
-$ sh scripts/compile.sh
+$ yarn compile
 ```
